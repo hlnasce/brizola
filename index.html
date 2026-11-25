@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#0b3d91">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg">
+<link rel="stylesheet" href="style.css">
+<title>Transferidor AR</title>
+</head>
+<body>
+<video id="cam" playsinline muted autoplay></video>
+<img id="photo" alt="Foto para medição">
+<canvas id="ov"></canvas>
+
+<header id="top">
+  <b>Transferidor AR</b>
+  <nav>
+    <button data-tab="medir" class="on">Medir</button>
+    <button data-tab="aprender">Aprender</button>
+    <button data-tab="historico">Histórico</button>
+  </nav>
+</header>
+
+<div id="msg"></div>
+<div id="toast"></div>
+
+<div id="hud">
+  <div id="mission"></div>
+  <div id="readout"><span id="deg">—</span><span id="kind"></span></div>
+  <div id="tip"></div>
+  <div class="row">
+    <button id="bMode">Ângulo interno</button>
+    <button id="bFreeze">Congelar</button>
+    <button id="bReset">Zerar</button>
+    <button id="bSave" class="primary">Salvar</button>
+  </div>
+  <div class="row">
+    <input id="est" inputmode="decimal" placeholder="Sua estimativa em graus (opcional)" style="flex:3">
+    <button id="bPhoto">Foto</button>
+    <button id="bCam">Câmera</button>
+    <input id="file" type="file" accept="image/*" hidden>
+  </div>
+  <div class="row fine">
+    <span id="selName"></span>
+    <button data-n="-1,0">◀</button><button data-n="1,0">▶</button>
+    <button data-n="0,-1">▲</button><button data-n="0,1">▼</button>
+  </div>
+  <div class="note">Para maior precisão, deixe o celular paralelo à superfície medida. Em perspectiva, os ângulos aparentes ficam distorcidos.</div>
+</div>
+
+<section id="aprender" class="panel">
+  <h2>Modo aprendizagem</h2>
+  <details open><summary>O que é um ângulo?</summary>
+    <p>Um ângulo é a abertura entre duas semirretas que partem do mesmo ponto, chamado vértice. Medimos essa abertura em graus (°). Uma volta completa tem 360°.</p>
+  </details>
+  <details><summary>Tipos de ângulos</summary>
+    <table>
+      <tr><th>Tipo</th><th>Medida</th></tr>
+      <tr><td>Agudo</td><td>maior que 0° e menor que 90°</td></tr>
+      <tr><td>Reto</td><td>exatamente 90° (o canto de uma folha)</td></tr>
+      <tr><td>Obtuso</td><td>maior que 90° e menor que 180°</td></tr>
+      <tr><td>Raso</td><td>exatamente 180° (uma linha reta)</td></tr>
+      <tr><td>Côncavo (reentrante)</td><td>maior que 180° e menor que 360°</td></tr>
+      <tr><td>Completo</td><td>360° (uma volta inteira)</td></tr>
+    </table>
+  </details>
+  <details><summary>Como posicionar o transferidor</summary>
+    <ol>
+      <li>Arraste o ponto vermelho (centro) até o vértice do ângulo.</li>
+      <li>Gire a base arrastando o ponto laranja até a linha de base coincidir com um dos lados.</li>
+      <li>Arraste os marcadores A (amarelo) e B (azul) até cada lado do ângulo.</li>
+      <li>Leia o valor no painel e confira na escala do transferidor.</li>
+      <li>Use as setas do ajuste fino para acertar em décimos de grau.</li>
+    </ol>
+  </details>
+  <details><summary>Desafios na escola</summary>
+    <ul>
+      <li>A porta aberta: meça o ângulo entre a porta e o batente.</li>
+      <li>O canto de uma carteira ou mesa.</li>
+      <li>A janela entreaberta.</li>
+      <li>Os ponteiros de um relógio às 4h.</li>
+      <li>A inclinação de uma rampa.</li>
+      <li>O ângulo entre duas paredes e o piso.</li>
+    </ul>
+  </details>
+  <details open><summary>Caça aos ângulos</summary>
+    <p id="missionText">Sorteie uma missão e procure o ângulo na escola.</p>
+    <button id="bMission">Sortear missão</button>
+  </details>
+  <details><summary>Desafio de estimativa</summary>
+    <p>Olhe o ângulo e estime a medida sem usar o transferidor.</p>
+    <canvas id="chCv" width="240" height="180"></canvas>
+    <div class="row" style="margin-top:8px">
+      <input id="chIn" inputmode="decimal" placeholder="Sua estimativa (°)">
+      <button id="chOk" class="primary">Conferir</button>
+      <button id="chNew">Novo</button>
+    </div>
+    <p id="chRes"></p>
+  </details>
+</section>
+
+<section id="historico" class="panel">
+  <h2>Histórico de medições</h2>
+  <ul id="histList"></ul>
+  <button id="bClear">Apagar todo o histórico</button>
+</section>
+
+<div id="home">
+  <h1>Transferidor AR</h1>
+  <p>Aponte a câmera para um ângulo, posicione o transferidor virtual e descubra a medida em graus.</p>
+  <button class="primary" data-go="medir">Medir ângulo</button>
+  <button data-go="aprender">Modo aprendizagem</button>
+  <button data-go="historico">Histórico</button>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
